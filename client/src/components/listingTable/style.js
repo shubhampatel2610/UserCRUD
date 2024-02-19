@@ -11,9 +11,6 @@ import {
 } from "@mui/material";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import MuiPopover from "../muiPopover";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 const CustomTable = styled(Table)(({ theme }) => ({
   position: "relative",
@@ -97,18 +94,6 @@ const MenuLabels = styled(Typography)(() => ({
   fontSize: "16px",
 }));
 
-const CustomViewIcon = styled(VisibilityIcon)(({ theme }) => ({
-  color: theme.primary.greenColor,
-}));
-
-const CustomEditIcon = styled(EditNoteIcon)(({ theme }) => ({
-  color: theme.primary.blueColor,
-}));
-
-const CustomDeleteIcon = styled(DeleteIcon)(({ theme }) => ({
-  color: theme.primary.redColor,
-}));
-
 const StyledFooter = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "flex-end",
@@ -149,9 +134,6 @@ export {
   PopoverBox,
   PopoverItem,
   MenuLabels,
-  CustomViewIcon,
-  CustomEditIcon,
-  CustomDeleteIcon,
   StyledFooter,
   StyledPagination,
 };

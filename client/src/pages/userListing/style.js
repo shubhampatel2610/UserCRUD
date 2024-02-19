@@ -1,6 +1,9 @@
 import styled from "@emotion/styled";
 import { Avatar, Box } from "@mui/material";
 import { MuiButton } from "../../components";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const MainContainer = styled(Box)(() => ({
   display: "flex",
@@ -37,6 +40,18 @@ const CustomAvatar = styled(Avatar)(() => ({
   width: 40,
 }));
 
+const CustomViewIcon = styled(VisibilityIcon)(({ theme }) => ({
+  color: theme.primary.greenColor,
+}));
+
+const CustomEditIcon = styled(EditNoteIcon)(({ theme }) => ({
+  color: theme.primary.blueColor,
+}));
+
+const CustomDeleteIcon = styled(DeleteIcon)(({ theme }) => ({
+  color: theme.primary.redColor,
+}));
+
 export {
   MainContainer,
   HeaderContainer,
@@ -44,4 +59,7 @@ export {
   CustomSearchField,
   CustomSearchButton,
   CustomAvatar,
+  CustomViewIcon,
+  CustomEditIcon,
+  CustomDeleteIcon,
 };

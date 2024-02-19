@@ -11,9 +11,6 @@ import {
   PopoverBox,
   MenuLabels,
   PopoverItem,
-  CustomViewIcon,
-  CustomEditIcon,
-  CustomDeleteIcon,
   StyledFooter,
   StyledPagination,
 } from "./style";
@@ -50,31 +47,22 @@ const ListingTable = ({
                   Object.keys(item).map((key) => {
                     return key === "actions" ? (
                       <CustomTableCell isBody={true}>
-                      {console.log(item[key])}
                         <Box align="center">
                           <StyledPopover
                             Icon={<MenuIcon />}
                             closeOnItemClick={true}
                           >
                             <PopoverBox>
-                              <Link to="/">
-                                <PopoverItem>
-                                  <CustomViewIcon />
-                                  <MenuLabels>{"View"}</MenuLabels>
-                                </PopoverItem>
-                              </Link>
-                              <Link to="/user">
-                                <PopoverItem>
-                                  <CustomEditIcon />
-                                  <MenuLabels>{"Edit"}</MenuLabels>
-                                </PopoverItem>
-                              </Link>
-                              {item[key].delete && <Link onClick={item[key].onDeleteClick}>
-                                <PopoverItem>
-                                  <CustomDeleteIcon />
-                                  <MenuLabels>{"Delete"}</MenuLabels>
-                                </PopoverItem>
-                              </Link>}
+                              {item[key].map((item) => {
+                                return (
+                                  <Link onClick={item?.onClick}>
+                                    <PopoverItem>
+                                      {item?.icon}
+                                      <MenuLabels>{item?.label}</MenuLabels>
+                                    </PopoverItem>
+                                  </Link>
+                                );
+                              })}
                             </PopoverBox>
                           </StyledPopover>
                         </Box>

@@ -14,6 +14,9 @@ import {
   CustomSearchField,
   CustomSearchButton,
   CustomAvatar,
+  CustomViewIcon,
+  CustomEditIcon,
+  CustomDeleteIcon,
 } from "./style";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
@@ -74,15 +77,21 @@ const userListing = () => {
       actions: [
         {
           view: true,
-          onViewClick: () => console.log("View click"),
+          label: "View",
+          icon: <CustomViewIcon />,
+          onClick: () => console.log("View click"),
         },
         {
           edit: true,
-          onEditClick: () => console.log("Edit click"),
+          label: "Edit",
+          icon: <CustomEditIcon />,
+          onClick: () => console.log("Edit click"),
         },
         {
           delete: true,
-          onDeleteClick: () => {console.log("delete click")},
+          label: "Delete",
+          icon: <CustomDeleteIcon />,
+          onClick: () => {setOpenDeleteModal(true);},
         },
       ],
     },
