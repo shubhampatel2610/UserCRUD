@@ -22,7 +22,6 @@ import useUser from "./useUser";
 
 const User = () => {
   const navigate = useNavigate();
-
   const { createLoading, handleCreateUser } = useUser();
 
   const {

@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { AXIOS_URL } from "../../constant";
 import axios from "axios";
 import { saveAs } from "file-saver";
+import { useNavigate } from "react-router-dom";
 
 const useUserListing = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [fetchLoading, setFetchLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -27,7 +29,7 @@ const useUserListing = () => {
       }
     };
     fetchUsers();
-  }, [page]);
+  }, [ page ]);
 
   const handleCsvClick = async () => {
     try {
@@ -57,6 +59,10 @@ const useUserListing = () => {
     }
   };
 
+  const handleSelectedUser = (userId) => {
+    // navigate("/user", { state : { selectedUserId: userId }})
+  }
+
   return {
     users,
     fetchLoading,
@@ -67,6 +73,7 @@ const useUserListing = () => {
     handleChangePage,
     openDeleteModal,
     setOpenDeleteModal,
+    handleSelectedUser
   };
 };
 

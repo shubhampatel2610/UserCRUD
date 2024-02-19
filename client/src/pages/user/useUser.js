@@ -1,9 +1,19 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AXIOS_URL } from "../../constant";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const useUser = () => {
+  const navigate = useNavigate();
   const [createLoading, setCreateLoading] = useState(false);
+  const location = useLocation();
+  const selectedUserId = location?.state?.selectedUserId ?? "";
+  const [initialUserData, setInitialUserData] = useState({});
+  const [userId, setUserId] = useState(selectedUserId);
+
+  // setUserId(selectedUserId)
+  console.log(selectedUserId);
+  navigate("/")
 
   const handleCreateUser = async (data) => {
     try {

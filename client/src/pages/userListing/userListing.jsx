@@ -21,7 +21,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import useUserListing from "./useUserListing";
-import { useEffect } from "react";
 
 const userListing = () => {
   const navigate = useNavigate();
@@ -37,13 +36,17 @@ const userListing = () => {
     handleChangePage,
     openDeleteModal,
     setOpenDeleteModal,
+    handleSelectedUser
   } = useUserListing();
 
   const onSubmit = (data) => {
     handleSearchClick(data?.searchText);
+    // handleSelectedUser("65d3312820794240c594d420")
   };
 
-  // const userData = users?.data.map((item, index) => ({
+   console.log(users?.data?.length)
+
+  // const userData = users?.data?.length > "0" && users?.data.map((item, index) => ({
   //   No: index + 1,
   //   fullName: item?.firstName+" "+item?.lastName,
   //   email: item?.email,
@@ -66,6 +69,8 @@ const userListing = () => {
   //   ],
   // }))
 
+  // console.log(userData)
+
   const userData = [
     {
       no: 1,
@@ -85,7 +90,7 @@ const userListing = () => {
           edit: true,
           label: "Edit",
           icon: <CustomEditIcon />,
-          onClick: () => console.log("Edit click"),
+          onClick: handleSelectedUser("65d3312820794240c594d420"),
         },
         {
           delete: true,
