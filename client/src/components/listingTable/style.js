@@ -119,6 +119,11 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
       backgroundColor: theme.primary.buttonColor,
       color: theme.primary.whiteColor,
     },
+    "&.Mui-selected:hover": {
+      backgroundColor: theme.primary.whiteColor,
+      border: `1px solid ${theme.primary.buttonColor}`,
+      color: theme.primary.blackColor,
+    },
   },
 }));
 
