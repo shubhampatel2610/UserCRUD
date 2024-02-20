@@ -45,6 +45,7 @@ const ListingTable = ({
               <CustomTableRow key={index}>
                 {Object.keys(item) &&
                   Object.keys(item).map((key) => {
+                    const startIndex = (page - 1) * 10 + 1;
                     return key === "actions" ? (
                       <CustomTableCell isBody={true}>
                         <Box align="center">

@@ -11,25 +11,31 @@ const useUserListing = () => {
   const [page, setPage] = useState(1);
   const [csvLoading, setCsvLoading] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+  const fetchUsers = async () => {
+    try {
+      setFetchLoading(true);
+      const response = await axios.get(AXIOS_URL + `/users?page=${page}&limit=${10}`);
+      setUsers(response?.data);
+    } catch (error) {
+      console.error("Error fetching users", error);
+    } finally {
+      setFetchLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setFetchLoading(true);
-        const response = await axios.get(AXIOS_URL + "/users");
-        setUsers(response?.data);
-      } catch (error) {
-        console.error("Error fetching users", error);
-      } finally {
-        setFetchLoading(false);
-      }
-    };
+    fetchUsers(); 
+  }, []);
+
+  useEffect(() => {
     fetchUsers();
-  }, [ page ]);
+  }, [page, deleteLoading]);
 
   const handleCsvClick = async () => {
     try {
@@ -49,7 +55,7 @@ const useUserListing = () => {
     try {
       setFetchLoading(true);
       const response = await axios.get(
-        AXIOS_URL + `/search-users?searchText=${searchText}`
+        AXIOS_URL + (searchText === undefined ? "/users" : `/search-users?searchText=${searchText}`)
       );
       setUsers(response?.data);
     } catch (error) {
@@ -59,8 +65,33 @@ const useUserListing = () => {
     }
   };
 
-  const handleSelectedUser = (userId) => {
-    // navigate("/user", { state : { selectedUserId: userId }})
+  const handleSelectedUser = async (userId, key) => {
+    try {
+      setFetchLoading(true);
+      const response = await axios.get(
+        AXIOS_URL + `/users/${userId}`
+      );
+      navigate(key === "edit" ? "/user" : "/user-details", { state : { userData: response?.data?.data }})
+    } catch (error) {
+      console.error("Error fetching user details", error);
+    } finally {
+      setFetchLoading(false);
+    }
+  }
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      setDeleteLoading(true);
+      await axios.delete(
+        AXIOS_URL + `/delete-user/${userId}`
+      );
+      navigate("/");
+    } catch (error) {
+      console.error("Error fetching user details", error);
+    } finally {
+      setDeleteLoading(false);
+      setOpenDeleteModal(false);
+    }
   }
 
   return {
@@ -73,7 +104,9 @@ const useUserListing = () => {
     handleChangePage,
     openDeleteModal,
     setOpenDeleteModal,
-    handleSelectedUser
+    handleSelectedUser,
+    handleDeleteUser,
+    deleteLoading
   };
 };
 

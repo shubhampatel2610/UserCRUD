@@ -3,36 +3,82 @@ import {
   MuiAutoComplete,
   MuiButton,
   MuiRadioButton,
-  MuiTextField,
 } from "../../components";
 import {
   CustomAvatar,
   CustomMuiButton,
+  CustomMuiTextField,
   FormContainer,
   FormRow,
   HeaderContainer,
   HeaderTypo,
   InputBox,
   MainContainer,
+  ValidationMessage,
 } from "./style";
 import { GenderOptions, StatusOptions } from "./constant";
 import { UserIcon } from "../../assets/images";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useUser from "./useUser";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from "react";
 
 const User = () => {
   const navigate = useNavigate();
   const { createLoading, handleCreateUser } = useUser();
+  const location = useLocation();
+  const selectedUserData = location?.state?.userData ?? {};
+
+  console.log(selectedUserData)
+
+  const userSchema = Yup.object().shape({
+    firstName: Yup.string().required("First Name is required"),
+    lastName: Yup.string().required("Last Name is required"),
+    email: Yup.string()
+      .email("Provide valid Email")
+      .required("Email is required"),
+    mobile: Yup.string()
+      .required("Mobile Number is required")
+      .matches(/^\d{10}$/, "Mobile number must be exactly 10 digits"),
+    gender: Yup.string().required("Gender is required"),
+    status: Yup.string().required("Status is required"),
+    profile: Yup.string().required("Profile picture is required"),
+    location: Yup.string().required("Location is required"),
+  });
 
   const {
     handleSubmit,
     control,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(userSchema),
+    defaultValues: {
+      firstName: selectedUserData?.firstName,
+      lastName: selectedUserData?.lastName,
+      email: selectedUserData?.email,
+      mobile: selectedUserData?.mobile,
+      gender: selectedUserData?.gender,
+      status: selectedUserData?.status,
+      profile: selectedUserData?.profile,
+      location: selectedUserData?.location,
+    },
+  });
+
+  useEffect(() => {
+    setValue("firstName", selectedUserData?.firstName);
+    setValue("lastName", selectedUserData?.lastName);
+    setValue("email", selectedUserData?.email);
+    setValue("mobile", selectedUserData?.mobile);
+    setValue("gender", selectedUserData?.gender);
+    setValue("status", selectedUserData?.status);
+    setValue("profile", selectedUserData?.profile);
+    setValue("location", selectedUserData?.location);
+  }, [selectedUserData.length > 0]);
 
   const onSubmit = (data) => {
-    handleCreateUser(data);
+    handleCreateUser(data, (selectedUserData.length > 0 ? true : false));
   };
 
   return (
@@ -50,7 +96,7 @@ const User = () => {
           </FormRow>
           <FormRow>
             <InputBox>
-              <MuiTextField
+              <CustomMuiTextField
                 label={"First Name"}
                 required={true}
                 placeholder={"Enter First name"}
@@ -58,36 +104,48 @@ const User = () => {
                 name={"firstName"}
                 control={control}
               />
+              <ValidationMessage>
+                {errors.firstName?.message}
+              </ValidationMessage>
             </InputBox>
             <InputBox>
-              <MuiTextField
+              <CustomMuiTextField
                 label={"Last Name"}
                 placeholder={"Enter Last Name"}
                 type={"text"}
                 name={"lastName"}
                 control={control}
               />
+              <ValidationMessage>
+                {errors.lastName?.message}
+              </ValidationMessage>
             </InputBox>
           </FormRow>
 
           <FormRow>
             <InputBox>
-              <MuiTextField
+              <CustomMuiTextField
                 label={"Email Address"}
                 placeholder={"Enter Email"}
                 type={"email"}
                 name={"email"}
                 control={control}
               />
+              <ValidationMessage>
+                {errors.email?.message}
+              </ValidationMessage>
             </InputBox>
             <InputBox>
-              <MuiTextField
+              <CustomMuiTextField
                 label={"Mobile Number"}
                 placeholder={"Enter Mobile Number"}
                 type={"number"}
                 name={"mobile"}
                 control={control}
               />
+              <ValidationMessage>
+                {errors.mobile?.message}
+              </ValidationMessage>
             </InputBox>
           </FormRow>
 
@@ -98,7 +156,11 @@ const User = () => {
                 options={GenderOptions}
                 name={"gender"}
                 control={control}
+                value={selectedUserData?.gender}
               />
+              <ValidationMessage>
+                {errors.gender?.message}
+              </ValidationMessage>
             </InputBox>
             <InputBox>
               <MuiAutoComplete
@@ -108,27 +170,36 @@ const User = () => {
                 name={"status"}
                 control={control}
               />
+              <ValidationMessage>
+                {errors.status?.message}
+              </ValidationMessage>
             </InputBox>
           </FormRow>
 
           <FormRow>
             <InputBox>
-              <MuiTextField
+              <CustomMuiTextField
                 label={"Your Profile"}
                 placeholder={"Select Your Profile"}
                 type={"file"}
                 name={"profile"}
                 control={control}
               />
+              <ValidationMessage>
+                {errors.profile?.message}
+              </ValidationMessage>
             </InputBox>
             <InputBox>
-              <MuiTextField
+              <CustomMuiTextField
                 label={"Location"}
                 placeholder={"Enter Location"}
                 type={"text"}
                 name={"location"}
                 control={control}
               />
+              <ValidationMessage>
+                {errors.location?.message}
+              </ValidationMessage>
             </InputBox>
           </FormRow>
 

@@ -1,21 +1,15 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AXIOS_URL } from "../../constant";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const useUser = () => {
-  const navigate = useNavigate();
   const [createLoading, setCreateLoading] = useState(false);
   const location = useLocation();
-  const selectedUserId = location?.state?.selectedUserId ?? "";
-  const [initialUserData, setInitialUserData] = useState({});
-  const [userId, setUserId] = useState(selectedUserId);
+  const selectedUserData = location?.state?.userData ?? {};
+  const navigate = useNavigate();
 
-  // setUserId(selectedUserId)
-  console.log(selectedUserId);
-  navigate("/")
-
-  const handleCreateUser = async (data) => {
+  const handleCreateUser = async (data, key) => {
     try {
       setCreateLoading(true);
       const userData = {
@@ -24,15 +18,21 @@ const useUser = () => {
         email: data?.email,
         mobile: data?.mobile,
         gender: data?.gender,
-        status: data?.status.label,
+        status: data?.status,
         image: data?.profile,
         location: data?.location,
       };
-      await axios.post(AXIOS_URL + `/add-user`, userData);
+      (await key)
+        ? axios.patch(
+            AXIOS_URL + `/update-user/${selectedUserData?._id}`,
+            userData
+          )
+        : axios.post(AXIOS_URL + `/add-user`, userData);
     } catch (error) {
       console.error("Error creating new user", error);
     } finally {
       setCreateLoading(false);
+      navigate("/")
     }
   };
 

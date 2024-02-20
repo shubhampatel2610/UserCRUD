@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Avatar, Box, Typography } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
+import { ACTIVE_STATUS } from "../../constant";
 
 const MainContainer = styled(Box)(() => ({
   display: "flex",
@@ -66,6 +67,10 @@ const CustomTypoGraphy = styled(Typography)(() => ({
   fontWeight: "bold",
 }));
 
+const StatusTypography = styled(Typography)(({status, theme}) => ({
+    color: status === ACTIVE_STATUS ? theme.primary.greenColor : theme.primary.redColor,
+}));
+
 const CustomPhoneIcon = styled(PhoneIcon)(() => ({
   fontSize: "20px",
 }));
@@ -86,4 +91,5 @@ export {
   DetailContainer,
   CustomPhoneIcon,
   CustomEmailIcon,
+  StatusTypography,
 };

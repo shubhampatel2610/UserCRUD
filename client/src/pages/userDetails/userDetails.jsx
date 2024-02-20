@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MuiButton } from "../../components";
 import {
   BodyContainer,
@@ -12,11 +12,14 @@ import {
   HeaderContainer,
   HeaderTypo,
   MainContainer,
+  StatusTypography,
 } from "./style";
 import { Typography } from "@mui/material";
 
 const UserDetail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const selectedUserData = location?.state?.userData ?? {};
 
   return (
     <MainContainer>
@@ -31,23 +34,29 @@ const UserDetail = () => {
         <BodyRightContainer>
           <DetailContainer>
             <CustomTypoGraphy>{"Name:"}</CustomTypoGraphy>
-            <Typography></Typography>
+            <Typography>
+              {selectedUserData?.firstName +
+                " " +
+                selectedUserData?.lastName +
+                " "}
+              {`(${(selectedUserData?.gender[0])})`}
+            </Typography>
           </DetailContainer>
           <DetailContainer>
             <CustomTypoGraphy>{"Status:"}</CustomTypoGraphy>
-            <Typography></Typography>
+            <StatusTypography status={selectedUserData?.status}>{selectedUserData?.status}</StatusTypography>
           </DetailContainer>
           <DetailContainer>
             <CustomTypoGraphy>{"Location:"}</CustomTypoGraphy>
-            <Typography></Typography>
+            <Typography>{selectedUserData?.location}</Typography>
           </DetailContainer>
           <DetailContainer>
-            <CustomPhoneIcon />
-            <Typography></Typography>
+            <CustomPhoneIcon />{":"}
+            <Typography>{selectedUserData?.mobile}</Typography>
           </DetailContainer>
           <DetailContainer>
-            <CustomEmailIcon />
-            <Typography></Typography>
+            <CustomEmailIcon />{":"}
+            <Typography>{selectedUserData?.email}</Typography>
           </DetailContainer>
         </BodyRightContainer>
       </BodyContainer>

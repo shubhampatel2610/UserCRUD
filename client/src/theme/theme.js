@@ -16,6 +16,14 @@ const theme = createTheme({
     blueColor: "blue",
     redColor: "red",
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 550,
+      md: 800,
+      lg: 1200,
+    },
+  },
 });
 
 export default theme;

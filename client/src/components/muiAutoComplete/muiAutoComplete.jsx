@@ -35,9 +35,9 @@ const MuiAutocomplete = ({
             size={size}
             value={value}
             onChange={(_, data) => {
-              onChange(data);
+              onChange(data.label);
               if (handleChange) handleChange(_, data);
-              return data;
+              return data.label;
             }}
             PaperComponent={({ children }) => (
               <CustomPaper>{children}</CustomPaper>

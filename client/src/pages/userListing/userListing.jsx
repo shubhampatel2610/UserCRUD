@@ -21,10 +21,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import useUserListing from "./useUserListing";
+import { useState } from "react";
 
 const userListing = () => {
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
+  const [userId, setUserId] = useState();
 
   const {
     users,
@@ -36,71 +38,50 @@ const userListing = () => {
     handleChangePage,
     openDeleteModal,
     setOpenDeleteModal,
-    handleSelectedUser
+    handleSelectedUser,
+    handleDeleteUser,
+    deleteLoading,
   } = useUserListing();
 
   const onSubmit = (data) => {
     handleSearchClick(data?.searchText);
-    // handleSelectedUser("65d3312820794240c594d420")
   };
 
-   console.log(users?.data?.length)
+  const userData =
+    users && users?.data
+      ? users?.data?.map((item, index) => ({
+          No: index + 1,
+          fullName: item?.firstName + " " + item?.lastName,
+          email: item?.email,
+          gender: item?.gender,
+          status: item?.status,
+          Logo: <CustomAvatar alt="logo" />,
+          actions: [
+            {
+              view: true,
+              label: "View",
+              icon: <CustomViewIcon />,
+              onClick: () => handleSelectedUser(item?._id, "view"),
+            },
+            {
+              edit: true,
+              label: "Edit",
+              icon: <CustomEditIcon />,
+              onClick: () => handleSelectedUser(item?._id, "edit"),
+            },
+            {
+              delete: true,
+              label: "Delete",
+              icon: <CustomDeleteIcon />,
+              onClick: () => {
+                setOpenDeleteModal(true);
+                setUserId(item?._id);
+              },
+            },
+          ],
+        }))
+      : [];
 
-  // const userData = users?.data?.length > "0" && users?.data.map((item, index) => ({
-  //   No: index + 1,
-  //   fullName: item?.firstName+" "+item?.lastName,
-  //   email: item?.email,
-  //   gender: item?.gender,
-  //   status: item?.status,
-  //   Logo: <CustomAvatar alt="logo" />,
-  //   actions: [
-  //     {
-  //       view: true,
-  //       onViewClick: () => console.log("View click"),
-  //     },
-  //     {
-  //       edit: true,
-  //       onEditClick: () => console.log("Edit click"),
-  //     },
-  //     {
-  //       delete: true,
-  //       onDeleteClick: () => console.log("Delete click"),
-  //     },
-  //   ],
-  // }))
-
-  // console.log(userData)
-
-  const userData = [
-    {
-      no: 1,
-      fullName: "Demo",
-      email: "demo@gmail.com",
-      gender: "Male",
-      status: "Active",
-      Logo: <CustomAvatar alt="logo" src={""} />,
-      actions: [
-        {
-          view: true,
-          label: "View",
-          icon: <CustomViewIcon />,
-          onClick: () => console.log("View click"),
-        },
-        {
-          edit: true,
-          label: "Edit",
-          icon: <CustomEditIcon />,
-          onClick: handleSelectedUser("65d3312820794240c594d420"),
-        },
-        {
-          delete: true,
-          label: "Delete",
-          icon: <CustomDeleteIcon />,
-          onClick: () => {setOpenDeleteModal(true);},
-        },
-      ],
-    },
-  ];
   return (
     <>
       <Header />
@@ -139,25 +120,29 @@ const userListing = () => {
             />
           </InnerHeaderContainer>
         </HeaderContainer>
-        <ListingTable
-          header={headerTitles}
-          data={userData}
-          loadingStatus={fetchLoading}
-          onPageChange={handleChangePage}
-          page={page}
-          count={Math.ceil(userData.length / 10)}
-        />
+        {userData.length > 0 && (
+          <ListingTable
+            header={headerTitles}
+            data={userData}
+            loadingStatus={fetchLoading}
+            onPageChange={handleChangePage}
+            page={page}
+            count={Math.ceil(users?.totalUsers / 10)}
+          />
+        )}
 
-        {openDeleteModal && <MuiDeleteModal
-          open={openDeleteModal}
-          handleClose={() => setOpenDeleteModal(false)}
-          deleteEntity={"User"}
-          onCancelClick={() => setOpenDeleteModal(false)}
-          onDeleteClick={() => {
-            // handleDeleteTariff(tariffId);
-          }}
-          // deleteLoadingStatus={deleteLoadingStatus}
-        />}
+        {openDeleteModal && (
+          <MuiDeleteModal
+            open={openDeleteModal}
+            handleClose={() => setOpenDeleteModal(false)}
+            deleteEntity={"User"}
+            onCancelClick={() => setOpenDeleteModal(false)}
+            onDeleteClick={() => {
+              handleDeleteUser(userId);
+            }}
+            deleteLoadingStatus={deleteLoading}
+          />
+        )}
       </MainContainer>
     </>
   );

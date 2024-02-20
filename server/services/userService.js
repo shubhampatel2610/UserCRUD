@@ -8,10 +8,11 @@ const getAllUsers = async (req, res) => {
     const limit = req.query.limit ? parseInt(req.query.limit) : 10;
     const skip = (page - 1) * limit;
 
+    const totalUsersCount = await User.countDocuments();
     const users = await User.find().limit(limit * 1).skip(skip);
 
     console.log(users);
-    res.status(200).json({ message: "All Users Details", data: users });
+    res.status(200).json({ message: "All Users Details", data: users, totalUsers: totalUsersCount });
   } catch (error) {
     res.status(500).send("Internal Server Error");
   }
